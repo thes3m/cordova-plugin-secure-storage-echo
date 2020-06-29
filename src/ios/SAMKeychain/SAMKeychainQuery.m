@@ -251,8 +251,13 @@
 	static dispatch_once_t onceToken;
 	static NSBundle *resourcesBundle = nil;
 	dispatch_once(&onceToken, ^{
-		NSURL *url = [[NSBundle bundleForClass:[self class]] URLForResource:@"SAMKeychain" withExtension:@"bundle"];
-		resourcesBundle = [NSBundle bundleWithURL:url];
+        @try {
+            NSURL *url = [[NSBundle bundleForClass:[self class]] URLForResource:@"SAMKeychain" withExtension:@"bundle"];
+            resourcesBundle = [NSBundle bundleWithURL:url];
+        } @catch (NSException *exception) {
+            NSURL *url = [[NSBundle mainBundle] URLForResource:@"SAMKeychain" withExtension:@"bundle"];
+            resourcesBundle = [NSBundle bundleWithURL:url];
+        }
 	});
 	
 	NSString *message = nil;
